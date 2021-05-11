@@ -1,47 +1,44 @@
 let videoElement = document.getElementById('video');
 
+let index = 0;
+
+view.scale(-1, 1);
+
 function onResults(results) {
   if (results.multiHandLandmarks) {
     let marks = results.multiHandLandmarks;
     let hand = marks[0];
     if (hand) {
-      let thumbTip = new Point(hand[4]) * view.size;
-      let indexFingerTip = new Point(hand[8]) * view.size;
-      let middleFingerTip = new Point(hand[12]) * view.size;
-      let ringFingerTip = new Point(hand[16]) * view.size;
-      let pinkyTip = new Point(hand[20]) * view.size;
-      let tips = [
-        thumbTip,
-        indexFingerTip,
-        middleFingerTip,
-        ringFingerTip,
-        pinkyTip
-      ];
-      
-      let averageCenter = (
-        thumbTip +
-        indexFingerTip +
-        middleFingerTip +
-        ringFingerTip +
-        pinkyTip
-      ) / 5;
+      let scale = view.size;
+      let thumbTip = new Point(hand[4]) * scale;
+      let indexFingerTip = new Point(hand[8]) * scale;
+      let middleFingerTip = new Point(hand[12]) * scale;
+      let ringFingerTip = new Point(hand[16]) * scale;
+      let pinkyTip = new Point(hand[20]) * scale;
 
-      let maxDistance = 0;
-      for (let tip of tips) {
-        let vector = tip - averageCenter;
-        let distance = vector.length;
-        if (distance > maxDistance) {
-          maxDistance = distance;
+      let point = (thumbTip + indexFingerTip) / 2;
+      let distance = (thumbTip - indexFingerTip).length;
+
+      let circle = new Path.Circle({
+        center: point,
+        radius: distance / 2,
+        fillColor: {
+          hue: index,
+          saturation: 1,
+          brightness: 1
+        },
+      });
+
+      let lifeTime = 0;
+      circle.onFrame = function() {
+        circle.fillColor.hue++;
+        lifeTime++;
+        if (lifeTime > 360) {
+          circle.remove();
         }
       }
 
-      let point = averageCenter;
-
-      new Path.Circle({
-        center: point,
-        radius: maxDistance / 2,
-        fillColor: 'red'
-      });
+      index++;
     }
   }
 }
