@@ -15,9 +15,9 @@ function onResults(results) {
   canvasCtx.restore();
 }
 
-const hands = new Hands({locateFile: (file) => {
-  return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
-}});
+const hands = new Hands({
+  locateFile: (file) => `node_modules/@mediapipe/hands/${file}`
+});
 hands.setOptions({
   maxNumHands: 2,
   minDetectionConfidence: 0.5,
