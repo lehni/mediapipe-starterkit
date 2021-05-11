@@ -1,22 +1,21 @@
-const videoElement = document.getElementsByClassName('input_video')[0];
-const canvasElement = document.getElementsByClassName('output_canvas')[0];
-const canvasCtx = canvasElement.getContext('2d');
+let videoElement = document.getElementById('video');
+
+let path = new Path({
+  strokeColor: 'black'
+})
 
 function onResults(results) {
-  canvasCtx.save();
-  canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
   if (results.multiHandLandmarks) {
-    for (const landmarks of results.multiHandLandmarks) {
-      drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS,
-                    {color: '#00FF00', lineWidth: 5});
-      drawLandmarks(canvasCtx, landmarks, {color: '#FF0000', lineWidth: 2});
+    let hand = results.multiHandLandmarks[0];
+    if (hand) {
+      let indexFingerTip = new Point(hand[8]);
+      path.add(indexFingerTip * view.size);
     }
   }
-  canvasCtx.restore();
 }
 
-const hands = new Hands({
-  locateFile: (file) => `node_modules/@mediapipe/hands/${file}`
+let hands = new Hands({
+  locateFile: file => `node_modules/@mediapipe/hands/${file}`
 });
 hands.setOptions({
   maxNumHands: 2,
@@ -25,7 +24,7 @@ hands.setOptions({
 });
 hands.onResults(onResults);
 
-const camera = new Camera(videoElement, {
+let camera = new Camera(videoElement, {
   onFrame: async () => {
     await hands.send({image: videoElement});
   },

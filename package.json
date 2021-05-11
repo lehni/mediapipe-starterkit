@@ -7,6 +7,8 @@
     "@mediapipe/camera_utils": "^0.3.1620247984",
     "@mediapipe/control_utils": "^0.3.1620248228",
     "@mediapipe/drawing_utils": "^0.3.1620248257",
-    "@mediapipe/hands": "^0.3.1620248595"
+    "@mediapipe/hands": "^0.3.1620248595",
+    "acorn": "^8.2.4",
+    "paper": "^0.12.15"
   }
 }
