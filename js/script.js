@@ -4,6 +4,17 @@ let index = 0;
 
 view.scale(-1, 1);
 
+let paths = [];
+for (let i = 0; i <= 5; i++) {
+  paths[i] = new Path({
+    strokeColor: {
+      hue: 360 * i / 5,
+      saturation: 1,
+      brightness: 1
+    }
+  })
+}
+
 function onResults(results) {
   // console.log(results);
   if (results.multiHandedness) {
@@ -15,35 +26,12 @@ function onResults(results) {
     let hand = hands.left;
     if (hand) {
       let scale = view.size;
-      let thumbTip = new Point(hand[4]) * scale;
-      let indexFingerTip = new Point(hand[8]) * scale;
-      let middleFingerTip = new Point(hand[12]) * scale;
-      let ringFingerTip = new Point(hand[16]) * scale;
-      let pinkyTip = new Point(hand[20]) * scale;
-
-      let point = (thumbTip + indexFingerTip) / 2;
-      let distance = (thumbTip - indexFingerTip).length;
-
-      let circle = new Path.Circle({
-        center: point,
-        radius: distance / 2,
-        fillColor: {
-          hue: index,
-          saturation: 1,
-          brightness: 1
-        },
-      });
-
-      let lifeTime = 0;
-      circle.onFrame = function() {
-        circle.fillColor.hue++;
-        lifeTime++;
-        if (lifeTime > 360) {
-          circle.remove();
-        }
+      let tips = [hand[4], hand[8], hand[12], hand[16], hand[20]];
+      for (let i = 0; i <= 5; i++) {
+        let path = paths[i];
+        let point = new Point(tips[i]);
+        path.add(point * scale);
       }
-
-      index++;
     }
   }
 }
