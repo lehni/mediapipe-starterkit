@@ -5,9 +5,14 @@ let index = 0;
 view.scale(-1, 1);
 
 function onResults(results) {
-  if (results.multiHandLandmarks) {
-    let marks = results.multiHandLandmarks;
-    let hand = marks[0];
+  // console.log(results);
+  if (results.multiHandedness) {
+    let hands = {};
+    for (let { index, label } of results.multiHandedness) {
+      hands[label.toLowerCase()] = results.multiHandLandmarks[index];
+    }
+
+    let hand = hands.left;
     if (hand) {
       let scale = view.size;
       let thumbTip = new Point(hand[4]) * scale;
