@@ -1,0 +1,12 @@
+{
+  "name": "mediapipe-starterkit",
+  "version": "0.0.1",
+  "description": "A simple MediaPipe Starter-Kit with NPM dependencies",
+  "main": "index.html",
+  "dependencies": {
+    "@mediapipe/camera_utils": "^0.3.1620247984",
+    "@mediapipe/control_utils": "^0.3.1620248228",
+    "@mediapipe/drawing_utils": "^0.3.1620248257",
+    "@mediapipe/hands": "^0.3.1620248595"
+  }
+}
