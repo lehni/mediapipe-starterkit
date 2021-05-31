@@ -4,33 +4,31 @@ let index = 0;
 
 view.scale(-1, 1);
 
-let paths = [];
-for (let i = 0; i <= 5; i++) {
-  paths[i] = new Path({
-    strokeColor: {
-      hue: 360 * i / 5,
-      saturation: 1,
-      brightness: 1
-    }
-  })
+let smileys = [];
+for (let i = 0; i < 5; i++) {
+  let smiley = new Raster({ source: 'images/smiley.png' });
+  smileys.push(smiley);
 }
 
 function onResults(results) {
   // console.log(results);
   if (results.multiHandedness) {
     let hands = {};
-    for (let { index, label } of results.multiHandedness) {
-      hands[label.toLowerCase()] = results.multiHandLandmarks[index];
+    let i = 0
+    for (let { label } of results.multiHandedness) {
+      hands[label.toLowerCase()] = results.multiHandLandmarks[i++];
     }
 
-    let hand = hands.left;
+    let hand = hands.left || hands.right;
     if (hand) {
-      let scale = view.size;
       let tips = [hand[4], hand[8], hand[12], hand[16], hand[20]];
-      for (let i = 0; i <= 5; i++) {
-        let path = paths[i];
-        let point = new Point(tips[i]);
-        path.add(point * scale);
+      for (let i = 0; i < 5; i++) {
+        let smiley = smileys[i];
+        let tip = tips[i];
+        let point = new Point(tip) * view.size;
+        smiley.position = point;
+        let scale = Math.abs((0.2 - tip.z) * 0.2);
+        smiley.scaling = Math.max(scale, 0);
       }
     }
   }
