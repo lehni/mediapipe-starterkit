@@ -19,11 +19,12 @@ function onResults(results) {
   // console.log(results);
   if (results.multiHandedness) {
     let hands = {};
-    for (let { index, label } of results.multiHandedness) {
-      hands[label.toLowerCase()] = results.multiHandLandmarks[index];
+    let i = 0;
+    for (let { label } of results.multiHandedness) {
+      hands[label.toLowerCase()] = results.multiHandLandmarks[i++];
     }
 
-    let hand = hands.left;
+    let hand = hands.left || hands.right;
     if (hand) {
       let scale = view.size;
       let tips = [hand[4], hand[8], hand[12], hand[16], hand[20]];
